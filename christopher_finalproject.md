@@ -733,7 +733,7 @@ ggplot(promoter_features_df,
 save plot
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/binding_vs_expression.pdf")
 ```
-<img src="figures/binding_vs_expression.jpg" width="1000" height="800" />  
+<img src="figures/binding_vs_expression.jpg" width="800" height="500" />  
 
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
@@ -752,7 +752,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/nuclear_expression-vs-promoter_binding.pdf")
 ```
-<img src="figures/nuclear_expression-vs-promoter_binding.jpg" width="1000" height="800" />  
+<img src="figures/nuclear_expression-vs-promoter_binding.jpg" width="800" height="500" />  
 
 ## Is there a difference between cyto RNAs versus DBPs on promoter?
 ``` r
@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="1000" height="800" /> 
+<img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
@@ -836,17 +836,17 @@ non_superbinder_metaplot_df$gene_type <- "non_super_binder"
 superbinder_metaplot_df$gene_type <- "superbinder"
 combined_super_binder_metaplot_profile <- bind_rows(non_superbinder_metaplot_df, superbinder_metaplot_df)
 
-#ggplot(combined_super_binder_metaplot_profile, aes(x = x, y = dens, color = gene_type)) +
-  #geom_vline(xintercept = 0, lty = 2) + 
-  #geom_line(size = 1.5) +
-  #facet_wrap(~ dbp, scales = "free_y") +
-  #ggtitle("Promoter Metaplot") + 
-  #scale_x_continuous(breaks = c(-1000, 0, 1000),
-                     #labels = c("-1kb", "TSS", "+1kb"),
-                     #name = "") + 
-  #ylab("Peak frequency") +
-  #xlab("Distance from TSS") +  # add label to x-axis
-  #scale_color_manual(values = c("#424242", "#a8404c"))
-#ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
+ggplot(combined_super_binder_metaplot_profile, aes(x = x, y = dens, color = gene_type)) +
+  geom_vline(xintercept = 0, lty = 2) + 
+  geom_line(size = 1.5) +
+  facet_wrap(~ dbp, scales = "free_y") +
+  ggtitle("Promoter Metaplot") + 
+  scale_x_continuous(breaks = c(-1000, 0, 1000),
+                     labels = c("-1kb", "TSS", "+1kb"),
+                     name = "") + 
+  ylab("Peak frequency") +
+  xlab("Distance from TSS") +  # add label to x-axis
+  scale_color_manual(values = c("#424242", "#a8404c"))
+ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
 <img src="figures/superbinder_metaplot.jpg" width="800" height="500" /> 
