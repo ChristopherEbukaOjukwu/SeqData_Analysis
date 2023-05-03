@@ -4,7 +4,7 @@ Christopher Ebuka Ojukwu
 4/23/2023
 
 
-##Consensus Peaks Creation
+## Consensus Peaks Creation
 ``` r
 # filepath to import peaks
 broadpeakfilepath <- "/scratch/Shares/rinnclass/CLASS_2023/data/data/peaks"
@@ -24,7 +24,7 @@ consensus_list <- lapply(dbp, consensus_from_reduced, peak_list)
 names(consensus_list) <- dbp
 ```
 
-##Finding out the number of peaks
+## Finding out the number of peaks
 ``` r
 # creating list of num_peaks per dbp
 num_peaks <- sapply(consensus_list, length)
@@ -35,7 +35,7 @@ hist(num_peaks, breaks = 1000, xlim = c(0,3000))
 
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/figures/hist_num_peaks.pdf")
 ```
-<img src="" width="1888" />
+<img src="figures/hist_num_peaks.pdf" width="1888" />
 
 ##Filtering the consensus list 
 ``` r
