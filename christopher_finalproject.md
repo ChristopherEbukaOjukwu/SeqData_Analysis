@@ -222,8 +222,9 @@ most_recurring_dbd <- names(dbd_counts [dbd_counts  == max(dbd_counts )])
 # Print the result
 cat("Most recurring dbd:", most_recurring_dbd) #C2H2 ZF
 ```
-
-    ## Most recurring dbd: C2H2 ZF
+Result: 
+1. There are 344 proteins that are TFs
+2. The most recurring dbd is C2H2 ZF
     
  ## Creating promoter peak occurrence matrix
 ``` r
