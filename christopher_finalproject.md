@@ -38,7 +38,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 <img src="figures/numpeaks_1.png" width="800" height="500" />
 
 ## Looking at just the first 3000
-<img src="figures/numpeaks_2.png" width="1888" />
+<img src="figures/numpeaks_2.png" width="800" height="500" />
 
 ##Filtering the consensus list 
 ``` r
@@ -382,7 +382,7 @@ plot(hist(bin_hier$height), main="Peak Occurence Distribution",
      xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
 dev.off()
 ```
-<img src="figures/dbp_hclust_dendro-2.jpg" width="1888" />
+<img src="figures/dbp_hclust_dendro-2.jpg" width="800" height="500" />
 
 ```r
 
@@ -437,7 +437,7 @@ ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
 # Now let's save this figure
 ggsave("figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
 ```
-<img src="figures/ lncrna_hclust_binary_dist.jpg" width="1888" /> 
+<img src="figures/ lncrna_hclust_binary_dist.jpg" width="800" height="500" /> 
 
 ```r
 
@@ -518,7 +518,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 
 save(bin_hier_mrna, mrna_peak_occurence, bin_hier_lncrna, lncrna_peak_occurence, lncrna_promoters, mrna_promoters, lncrna_mrna_promoters, lncrna_mrna_genes, lncrna_mrna_genes_df, mrna_lncrna_genes, lncrna_genes, mrna_genes, gencode_genes, file = "results/clustering_features.RData")
 ```
-<img src="figures/mrna_hclust_binary_dist.jpg" width="1888" /> 
+<img src="figures/mrna_hclust_binary_dist.jpg" width="800" height="500" /> 
 
 ## Creating metaplots initial objects
 ``` r
@@ -577,7 +577,7 @@ ggplot(lncrna_metaplot_df,
 
 dev.off()
 ```
-<img src="figures/lncrna_promoter_metaplot.jpg" width="1888" /> 
+<img src="figures/lncrna_promoter_metaplot.jpg" width="800" height="500" /> 
 
 ## Metaplot for mRNA
 ``` r
@@ -608,7 +608,7 @@ ggplot(mrna_metaplot_df,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/mrna_promoter_metaplot.jpg" width="1888" /> 
+<img src="figures/mrna_promoter_metaplot.jpg" width="800" height="500" /> 
 
 ##  Metaplot for both mRNA and lncRNA
 ``` r
@@ -631,7 +631,7 @@ ggplot(combined_metaplot_profile,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/combined_promoter_metaplot.jpg" width="1000" height="500" /> 
+<img src="figures/combined_promoter_metaplot.jpg" width="800" height="500" /> 
 
 ## plotting the density of DBP localization events
 ``` r
@@ -648,7 +648,7 @@ geom_density(alpha = 0.2, color = "#424242", fill = "#424242") +
 #saving
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/num_binding_events_per_promoter.pdf")
 ```
-<img src="figures/num_binding_events_per_promoter.jpg" width="1888" /> 
+<img src="figures/num_binding_events_per_promoter.jpg" width="800" height="500" /> 
 
 ## Beginning of RNASeq expression
 ``` r
@@ -682,7 +682,7 @@ ggplot(promoter_features_df, aes(x = number_of_dbp)) +
 # Let's save
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/DBP_binding_density_plot.pdf")
 ```
-<img src="figures/DBP_binding_density_plot" width="1888" />  
+<img src="figures/DBP_binding_density_plot" width="800" height="500" />  
 
 ## Heatmap of genes variable across samples
 ``` r
@@ -705,7 +705,7 @@ pdf("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_p
 heatmap
 dev.off()
 ```
-<img src="SeqData_Analysis/tpm_heatmap.jpg" width="1888" />  
+<img src="SeqData_Analysis/tpm_heatmap.jpg" width="800" height="500" />  
 
 ## Plotting binding vs expression
 ``` r
@@ -733,7 +733,7 @@ ggplot(promoter_features_df,
 save plot
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/binding_vs_expression.pdf")
 ```
-<img src="SeqData_Analysis/binding_vs_expression.jpg" width="1888" />  
+<img src="SeqData_Analysis/binding_vs_expression.jpg" width="800" height="500" />  
 
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
@@ -752,7 +752,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/nuclear_expression-vs-promoter_binding.pdf")
 ```
-<img src="SeqData_Analysis/nuclear_expression-vs-promoter_binding.jpg" width="1888" />  
+<img src="SeqData_Analysis/nuclear_expression-vs-promoter_binding.jpg" width="800" height="500" />  
 
 ## Is there a difference between cyto RNAs versus DBPs on promoter?
 ``` r
@@ -771,7 +771,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/cytoplasmic_expression-vs-promoter_binding.pdf")
 ```
-<img src="SeqData_Analysis/cytoplasmic_expression-vs-promoter_binding.pdf.jpg" width="1888" />  
+<img src="SeqData_Analysis/cytoplasmic_expression-vs-promoter_binding.pdf.jpg" width="800" height="500" />  
 
 ## This is another way to look at it
 ``` r
@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="SeqData_Analysis/mrna_lncrna_tpm_nuclear.jpg" width="1888" /> 
+<img src="SeqData_Analysis/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
@@ -849,4 +849,4 @@ combined_super_binder_metaplot_profile <- bind_rows(non_superbinder_metaplot_df,
   #scale_color_manual(values = c("#424242", "#a8404c"))
 #ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
-<img src="figures/superbinder_metaplot.jpg" width="1888" /> 
+<img src="figures/superbinder_metaplot.jpg" width="800" height="500" /> 
