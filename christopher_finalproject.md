@@ -733,7 +733,7 @@ ggplot(promoter_features_df,
 save plot
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/binding_vs_expression.pdf")
 ```
-<img src="figures/binding_vs_expression.jpg" width="800" height="500" />  
+<img src="figures/binding_vs_expression.jpg" width="1000" height="800" />  
 
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
@@ -752,7 +752,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/nuclear_expression-vs-promoter_binding.pdf")
 ```
-<img src="figures/nuclear_expression-vs-promoter_binding.jpg" width="800" height="500" />  
+<img src="figures/nuclear_expression-vs-promoter_binding.jpg" width="1000" height="800" />  
 
 ## Is there a difference between cyto RNAs versus DBPs on promoter?
 ``` r
@@ -771,7 +771,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/cytoplasmic_expression-vs-promoter_binding.pdf")
 ```
-<img src="figures/cytoplasmic_expression-vs-promoter_binding.pdf.jpg" width="800" height="500" />  
+<img src="figures/cytoplasmic_expression-vs-promoter_binding.jpg" width="800" height="500" />  
 
 ## This is another way to look at it
 ``` r
@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
+<img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="1000" height="800" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
