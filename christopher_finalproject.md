@@ -682,7 +682,7 @@ ggplot(promoter_features_df, aes(x = number_of_dbp)) +
 # Let's save
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/DBP_binding_density_plot.pdf")
 ```
-<img src="figures/DBP_binding_density_plot" width="800" height="500" />  
+<img src="figures/DBP_binding_density_plot.jpg" width="800" height="500" />  
 
 ## Heatmap of genes variable across samples
 ``` r
