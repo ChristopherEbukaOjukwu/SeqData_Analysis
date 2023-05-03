@@ -36,6 +36,8 @@ hist(num_peaks, breaks = 1000, xlim = c(0,3000))
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/figures/hist_num_peaks.pdf")
 ```
 <img src="figures/numpeaks_1.png" width="1888" />
+
+## Looking at just the first 3000
 <img src="figures/numpeaks_2.png" width="1888" />
 
 ##Filtering the consensus list 
@@ -95,59 +97,59 @@ for(i in 1:length(peaks)) {
 ##Loading and exploring genome features
 ``` r
 # What is the distribution of promoter overlaps versus gene-bodies (hint hist)
-#gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/da#ta/genomes/gencode.v32.annotation.gtf")
+gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/da#ta/genomes/gencode.v32.annotation.gtf")
 
 # gencode genes
-#gencode_genes <- gencode_gr[gencode_gr$type == "gene"] 
+gencode_genes <- gencode_gr[gencode_gr$type == "gene"] 
 
 # mrna_genes
-#mrna_genes <- gencode_genes[gencode_genes$gene_type %in% "protein_coding"]
+mrna_genes <- gencode_genes[gencode_genes$gene_type %in% "protein_coding"]
 
 # lncrna_genes
-#lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% "lncRNA"] 
+lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% "lncRNA"] 
 
 # mrna_lncrna_genes
-#mrna_lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% c("protein_coding","lncRNA")]
+mrna_lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% c("protein_coding","lncRNA")]
 
 # lncrna_mrna_promoters
-#lncrna_mrna_promoters <- promoters(mrna_lncrna_genes, upstream = 1000, downstream = 1000)
+lncrna_mrna_promoters <- promoters(mrna_lncrna_genes, upstream = 1000, downstream = 1000)
 
 # lncrna_gene_ids
-#lncrna_gene_ids <- mrna_lncrna_genes$gene_id[mrna_lncrna_genes$gene_type == "lncRNA"]
+lncrna_gene_ids <- mrna_lncrna_genes$gene_id[mrna_lncrna_genes$gene_type == "lncRNA"]
 
 # mrna_gene_ids
-#mrna_gene_ids <-mrna_lncrna_genes$gene_id[mrna_lncrna_genes$gene_type == "protein_coding"]
+mrna_gene_ids <-mrna_lncrna_genes$gene_id[mrna_lncrna_genes$gene_type == "protein_coding"]
 ```
 
-##Tracking filtered consensus peaks
+## Tracking filtered consensus peaks
 ``` r
 #numpeaks to track peak properties
-#num_peaks_df <- data.frame("dbp" = names(filtered_consensus_list),
+num_peaks_df <- data.frame("dbp" = names(filtered_consensus_list),
                            #"num_peaks" = sapply(filtered_consensus_list, #length))
 
 # total genome covered by peaks
-#num_peaks_df$total_peak_length <- sapply(filtered_consensus_list, function(x) sum(width(x)))
+num_peaks_df$total_peak_length <- sapply(filtered_consensus_list, function(x) sum(width(x)))
 
 # creating number of promoter overlaps entry
-#promoter_peak_counts <- count_peaks_per_feature(lncrna_mrna_promoters, filtered_consensus_list, type = "counts")
+promoter_peak_counts <- count_peaks_per_feature(lncrna_mrna_promoters, filtered_consensus_list, type = "counts")
 
 # creating promoter peak_occurence for clustering - Metaplots later.
-#promoter_peak_matrix <- count_peaks_per_feature(lncrna_mrna_promoters, filtered_consensus_list, type = "occurrence")
+promoter_peak_matrix <- count_peaks_per_feature(lncrna_mrna_promoters, filtered_consensus_list, type = "occurrence")
 
 # saving
-#write.table(promoter_peak_matrix, "results/promoter_peak_occurrence_matrix.tsv")
+write.table(promoter_peak_matrix, "results/promoter_peak_occurrence_matrix.tsv")
 
 # read back in
-#promoter_peak_occurrence_matrix <- read.table("results/promoter_peak_occurrence_matrix.tsv")
-# summing rows to get total number of promoter overlaps
+promoter_peak_occurrence_matrix <- read.table("results/promoter_peak_occurrence_matrix.tsv")
 
-#num_peaks_df$peaks_overlapping_promoters <- rowSums(promoter_peak_counts)
+#summing rows to get total number of promoter overlaps
+num_peaks_df$peaks_overlapping_promoters <- rowSums(promoter_peak_counts)
+
 # lncrna promoter overlaps 
-
-#num_peaks_df$peaks_overlapping_lncrna_promoters <- rowSums(promoter_peak_counts[,lncrna_gene_ids])
+num_peaks_df$peaks_overlapping_lncrna_promoters <- rowSums(promoter_peak_counts[,lncrna_gene_ids])
 
 # mrna promoter overlaps
-#num_peaks_df$peaks_overlapping_mrna_promoters <- rowSums(promoter_peak_counts[,mrna_gene_ids])
+num_peaks_df$peaks_overlapping_mrna_promoters <- rowSums(promoter_peak_counts[,mrna_gene_ids])
 
 # Finding overlaps with gene_bodies (will take a few minutes again)
 # Note this takes several minutes
@@ -156,232 +158,57 @@ genebody_peak_counts <- count_peaks_per_feature(mrna_lncrna_genes,
                                                 type = "counts")
 
 # All gene bodies overlaps
-#num_peaks_df$peaks_overlapping_genebody <- rowSums(genebody_peak_counts)
+num_peaks_df$peaks_overlapping_genebody <- rowSums(genebody_peak_counts)
 
 # lncRNA gene bodies 
-#num_peaks_df$peaks_overlapping_lncrna_genebody <- rowSums(genebody_peak_counts[,lncrna_gene_ids])
+num_peaks_df$peaks_overlapping_lncrna_genebody <- rowSums(genebody_peak_counts[,lncrna_gene_ids])
 
 # mRNA gene bodies
-#num_peaks_df$peaks_overlapping_mrna_genebody <- rowSums(genebody_peak_counts[,mrna_gene_ids])
+num_peaks_df$peaks_overlapping_mrna_genebody <- rowSums(genebody_peak_counts[,mrna_gene_ids])
 
 #plotting
-#hist(promoter_peak_counts, genebody_peak_counts)
-#plot(genebody_peak_counts, main="Promoter Peak Counts vs. Genebody Peak Counts",
-    # xlab="Promoter Peak Counts", ylab="Genebody Peak Counts", pch=20, col="blue")
+hist(promoter_peak_counts, genebody_peak_counts)
+plot(genebody_peak_counts, main="Promoter Peak Counts vs. Genebody Peak Counts",
+    xlab="Promoter Peak Counts", ylab="Genebody Peak Counts", pch=20, col="blue")
 # Add a grid
-#grid()
+grid()
 # Add a legend
-#legend("topright", legend="Data", pch=20, col="blue")
+legend("topright", legend="Data", pch=20, col="blue")
 ```
 
-##Finding out proteins that are TFs and most recurring dbd
+## Finding out proteins that are TFs and most recurring dbd
 ``` r
 # download TF annotations to results
-#url <- "https://www.cell.com/cms/10.1016/j.cell.2018.01.029/attachment/ede37821#-fd6f-41b7-9a0e-9d5410855ae6/mmc2.xlsx"
-#destination_for_url <- "results/TF_annotations.xlsx"
+url <- "https://www.cell.com/cms/10.1016/j.cell.2018.01.029/attachment/ede37821#-fd6f-41b7-9a0e-9d5410855ae6/mmc2.xlsx"
+destination_for_url <- "results/TF_annotations.xlsx"
 
 # to download we can use download.file
-#download.file(url, destination_for_url)
+download.file(url, destination_for_url)
 
 # reading in TF annotations 
 human_tfs <- readxl::read_excel("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/TF_annotations.xlsx",
                                 sheet = 2, skip = 1)
-```
 
-    ## Warning: Expecting logical in M1006 / R1006C13: got 'Contains a SANT and
-    ## multiple DNA-binding C2H2 domains. Motif is 99% AA ID from mouse (Transfac).'
-
-    ## Warning: Expecting logical in M1021 / R1021C13: got 'Close ortholog (PP1RA)
-    ## binds to mRNA; single-stranded DNA (ssDNA); poly(A) and poly(G) homopolymers
-    ## (Uniprot)'
-
-    ## Warning: Expecting logical in M1542 / R1542C13: got 'Contains 1 SANT domain'
-
-    ## Warning: Expecting logical in M1543 / R1543C13: got 'Contains 2 Myb DBDs.
-    ## Sources of Hocomoco/Transfac motifs are unclear. However these sequences look
-    ## similar to in vitro sites selected by SELEX (PMID:11082045)'
-
-    ## Warning: Expecting logical in M1544 / R1544C13: got 'Although CHD2 has weak
-    ## similarity to a Myb domain (PMID:9326634), it's more closely related to the
-    ## non-DNA-binding SANT domain based on our alignment analysis. The data showing
-    ## that show that CHD2 binding histone H3.3 (PMID:22569126) further support the
-    ## conclusion that the Myb domain is probably a SANT domain facilitating the
-    ## histone interaction'
-
-    ## Warning: Expecting logical in M1545 / R1545C13: got 'Contains a single SANT
-    ## domain, no evidence for sequence-specific DNA binding'
-
-    ## Warning: Expecting logical in M1546 / R1546C13: got 'Contains 2 Myb DBDs'
-
-    ## Warning: Expecting logical in M1547 / R1547C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1548 / R1548C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1549 / R1549C13: got 'Contains a single SANT
-    ## domain, no evidence for sequence-specific DNA binding'
-
-    ## Warning: Expecting logical in M1550 / R1550C13: got 'Domain is truncated, and
-    ## there is nothing known about this gene'
-
-    ## Warning: Expecting logical in M1551 / R1551C13: got 'Contains a single SANT
-    ## domain, no evidence for sequence-specific DNA binding'
-
-    ## Warning: Expecting logical in M1552 / R1552C13: got 'MIER2's Myb domain is more
-    ## similar to the non-DNA-binding SANT domain'
-
-    ## Warning: Expecting logical in M1553 / R1553C13: got 'MIER3's Myb domain is more
-    ## similar to the non-DNA-binding SANT domain'
-
-    ## Warning: Expecting logical in M1554 / R1554C13: got 'Contains 1 SANT domain,
-    ## and a SANTA domain'
-
-    ## Warning: Expecting logical in M1555 / R1555C13: got 'Contains a single Myb-like
-    ## domain with an insertion in the middle. It is ambiguous whether Myb-like
-    ## domains are DNA or protein binding. Since it has a single domain it's likely
-    ## non-specific, but future experiments should be performed to assay it's
-    ## specificity'
-
-    ## Warning: Expecting logical in M1556 / R1556C13: got 'Contains 3 Myb DBDs'
-
-    ## Warning: Expecting logical in M1557 / R1557C13: got 'Contains 3 Myb DBDs'
-
-    ## Warning: Expecting logical in M1558 / R1558C13: got 'Contains 3 Myb DBDs'
-
-    ## Warning: Expecting logical in M1559 / R1559C13: got 'Contains a single Myb-like
-    ## domain. Mouse ortholog has motif'
-
-    ## Warning: Expecting logical in M1560 / R1560C13: got 'MYSM1 has been shown to
-    ## bind DNA ? interaction with DNA requires the MYSM1 Myb but not the SWIRM domain
-    ## (PMID:17428495). Domain sequence alignment places it near DNA-binding Myb
-    ## domains but scores slightly higher as a SANT rather than Myb domain based on
-    ## Prosite patterns. Given that most Myb proteins that bind DNA sequence
-    ## specifically have multiple Myb domains in an array this protein could bind DNA
-    ## sequence non-specifically with it?s single Myb domain. Future experiments
-    ## should assay MYSM1?s specificity'
-
-    ## Warning: Expecting logical in M1561 / R1561C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1562 / R1562C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1564 / R1564C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1565 / R1565C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains'
-
-    ## Warning: Expecting logical in M1566 / R1566C13: got 'Contains 2 SANT domains,
-    ## and no other putative DNA-binding domains. RCOR3 SANT domains are known to
-    ## facilitate PPIs'
-
-    ## Warning: Expecting logical in M1567 / R1567C13: got 'SMARCA1 contains a
-    ## truncated Myb-like and SANT domain. Given the presence of the Myb-like domain,
-    ## and other domains known to associated with DNA (DEAD box helicase) it likely
-    ## associates with DNA non-sequence-specifically'
-
-    ## Warning: Expecting logical in M1568 / R1568C13: got 'Contains a SANT, and
-    ## Myb-like domain'
-
-    ## Warning: Expecting logical in M1569 / R1569C13: got 'Contains 1 SANT domain,
-    ## and no other putative DNA-binding domains. Motif logos look like bZIP dimeric
-    ## binding sites, and are thus likely specificifities of SMARCC1 interactors'
-
-    ## Warning: Expecting logical in M1570 / R1570C13: got 'Contains 1 SANT domain,
-    ## and no other putative DNA-binding domains. Motif logos ares likely
-    ## specificifities of SMARCC2 interactors'
-
-    ## Warning: Expecting logical in M1571 / R1571C13: got 'Contains only Myb DBDs'
-
-    ## Warning: Expecting logical in M1572 / R1572C13: got 'Contains 1 SANT domain'
-
-    ## Warning: Expecting logical in M1573 / R1573C13: got 'TADA2B contains a single
-    ## SANT domain and is thus unlikely to bind DNA'
-
-    ## Warning: Expecting logical in M1574 / R1574C13: got 'Contains a single Myb
-    ## domain (with slightly less simialrity to a SANT domain.) This domain has been
-    ## shown to be involved in PPIs but this may not be mutually exclusive with
-    ## DNA-binding. The sequence-specificity of CCDC79 should be investigated in the
-    ## future'
-
-    ## Warning: Expecting logical in M1575 / R1575C13: got 'Contains 1 Myb domain, and
-    ## has structural evidence of DNA-binding'
-
-    ## Warning: Expecting logical in M1576 / R1576C13: got 'Motif is inferred from
-    ## mouse (92% DBD AA ID)'
-
-    ## Warning: Expecting logical in M1577 / R1577C13: got 'TERF2IP contains a single
-    ## Myb-like domain. While it's unclear if TERF2IP (Human Rap1) contacts DNA
-    ## directly it has been shown to affect the DNA binding activity of TRF2'
-
-    ## Warning: Expecting logical in M1578 / R1578C13: got 'This protein contains Myb,
-    ## and Myb-like domains and is annotated as a Pol1 terminator. TTF1 DNA-binding
-    ## has been demonstrated in vitro (PMID: 7597036), but it's specificity has not
-    ## been determined'
-
-    ## Warning: Expecting logical in M1579 / R1579C13: got 'Contains 1 Myb DBD'
-
-    ## Warning: Expecting logical in M1580 / R1580C13: got 'Contains a GATA and SANT
-    ## domain. Unclear whether the GATA domain is a bona fide DBD as the MTA/RERE
-    ## family domains are atypical to human GATA domains (see alignment). In CIS-BP
-    ## there is one protein from C.elegans that shares domain homology and binds a
-    ## GATA motif (elg-27, ChIP-seq). The GATA ZnF domain of MTA1 is required for it's
-    ## interaction with RBBP4 and RBBP7 (PMID:18067919). Full-length protein has been
-    ## tried in HT-SELEX and did not yield a motif'
-
-    ## Warning: Expecting logical in M1581 / R1581C13: got 'Contains a GATA and SANT
-    ## domain. Unclear whether the GATA domain is a bona fide DBD as the MTA/RERE
-    ## family domains are atypical to human GATA domains (see alignment). In CIS-BP
-    ## there is one protein from C.elegans that shares domain homology and binds a
-    ## GATA motif (elg-27, ChIP-seq). Full-length protein has been tried in HT-SELEX,
-    ## and DBD has been tried on PBM - neither yielded motifs'
-
-    ## Warning: Expecting logical in M1582 / R1582C13: got 'Contains a GATA and SANT
-    ## domain. Unclear whether the GATA domain is a bona fide DBD as the MTA/RERE
-    ## family domains are atypical to human GATA domains (see alignment). In CIS-BP
-    ## there is one protein from C.elegans that shares domain homology and binds a
-    ## GATA motif (elg-27, ChIP-seq). Hasn't been tried in any in vitro assays'
-
-    ## Warning: Expecting logical in M1583 / R1583C13: got 'Contains a GATA and SANT
-    ## domain. Unclear whether the GATA domain is a bona fide DBD as the MTA/RERE
-    ## family domains are atypical to human GATA domains (see alignment). In CIS-BP
-    ## there is one protein from C.elegans that shares domain homology and binds a
-    ## GATA motif (elg-27, ChIP-seq). Has been tried as a DBD in HT-SELEX but did not
-    ## yield a motif'
-
-    ## Warning: Expecting logical in M1791 / R1791C13: got 'CNOT3 is a part of the
-    ## CCR4-NOT complex involved in mRNA decay'
-
-    ## Warning: Expecting logical in M1932 / R1932C13: got '"Prosite identifies a
-    ## low-confidence Myb-like domain (e.g. can?t decide between Myb and SANT) so it?s
-    ## probably not a TF"'
-
-    ## New names:
-    ## • `` -> `...4`
-
-``` r
 # let's rename the 4th column to indicate if it is a TF.
 names(human_tfs)[4] <- "is_tf"
 names(human_tfs)[3] <- "dbp"
 
 # now let's intersect gene names that are in our ChIP data and has TF identity.
-#length(which(tolower(num_peaks_df$dbp) %in% tolower(human_tfs$dbp)))
-# 407 of the 430 have matching gene_names - not bad
+length(which(tolower(num_peaks_df$dbp) %in% tolower(human_tfs$dbp)))
+ #407 of the 430 have matching gene_names - not bad
 
 #human_tfs <- human_tfs[tolower(human_tfs$Name) %in% tolower(num_peaks_df$dbp), 1:4]
 # adding new column names
-#names(human_tfs) <- c("ensembl_id",
+names(human_tfs) <- c("ensembl_id",
                       #"dbp",
                       #"dbd",
                       #"tf")
 
 # merging into num_peaks_df
-#num_peaks_df <- merge(num_peaks_df, human_tfs, all.x = T)
-#num_yes <- sum(num_peaks_df$tf == "Yes", na.rm = TRUE)
+num_peaks_df <- merge(num_peaks_df, human_tfs, all.x = T)
+num_yes <- sum(num_peaks_df$tf == "Yes", na.rm = TRUE)
 # Print the result
-#cat("Number of 'yes' occurrences:", num_yes) #344
+cat("Number of 'yes' occurrences:", num_yes) #344
 
 # Extract the column as a character vector
 column <- as.character(num_peaks_df$dbd)
@@ -405,22 +232,22 @@ promoter_peak_occurence <- count_peaks_per_feature(lncrna_mrna_promoters, filter
                                                type = "occurrence")
 
 # Let's double check that all lncrna & mrna genes are accounted for:
-#stopifnot(all(colnames(promoter_peak_occurence) == lncrna_mrna_promoters$gene_id))
+stopifnot(all(colnames(promoter_peak_occurence) == lncrna_mrna_promoters$gene_id))
 
 # saving
-#write.table(promoter_peak_occurence, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/lncrna_mrna_promoter_peak_occurence_matrix.tsv")
+write.table(promoter_peak_occurence, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/lncrna_mrna_promoter_peak_occurence_matrix.tsv")
 
 # Now let's use the 'data.frame()' fucntion. Set up a bunch of colnames and populate them.
-#peak_occurence_df <- data.frame("gene_id" = colnames(promoter_peak_occurence),
-                                #"gene_name" = lncrna_mrna_promoters$gene_name,
-                                #"gene_type" = lncrna_mrna_promoters$gene_type,
-                                #"chr" = lncrna_mrna_promoters@seqnames,   
-                                #"1kb_up_tss_start" = #lncrna_mrna_promoters@ranges@start,
-                                #"strand" = lncrna_mrna_promoters@strand,
-                                #"number_of_dbp" = #colSums(promoter_peak_occurence))
+peak_occurence_df <- data.frame("gene_id" = colnames(promoter_peak_occurence),
+                                "gene_name" = lncrna_mrna_promoters$gene_name,
+                                "gene_type" = lncrna_mrna_promoters$gene_type,
+                                "chr" = lncrna_mrna_promoters@seqnames,   
+                                "1kb_up_tss_start" = #lncrna_mrna_promoters@ranges@start,
+                                "strand" = lncrna_mrna_promoters@strand,
+                                "number_of_dbp" = #colSums(promoter_peak_occurence))
 
 # saving
-#write_csv(peak_occurence_df, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/peak_occurence_dataframe.csv")
+write_csv(peak_occurence_df, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/peak_occurence_dataframe.csv")
 ```
 
 ## Finding out which dbps are bound
@@ -457,8 +284,8 @@ GAPDH_promoter <- promoter_dbps %>%
 #write.csv(promoter_dbps, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/promoter_dbps.csv")
 
 #to look at peaks per dbp
-#ggplot(num_peaks_df, aes(x = num_peaks)) + 
- #geom_histogram(bins = 70)
+ggplot(num_peaks_df, aes(x = num_peaks)) + 
+ geom_histogram(bins = 70)
 ```
 
 ## Gene similarities via clustering
@@ -468,7 +295,7 @@ GAPDH_promoter <- promoter_dbps %>%
 promoter_peak_occurence_matrix <- read.table("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/lncrna_mrna_promoter_peak_occurence_matrix.tsv")
 
 # Converting to a matrix format for correlation analysis
-#promoter_peak_occurence_matrix <- as.matrix(promoter_peak_occurence_matrix)
+promoter_peak_occurence_matrix <- as.matrix(promoter_peak_occurence_matrix)
 
 # Now let's create distance matrix for each pairwise vector comparison for the whole matrix now.
 peak_occurence_dist <- dist(promoter_peak_occurence_matrix, method = "binary")
@@ -545,16 +372,18 @@ peak_occurence_dist
 
 ``` r
 # Ready to cluster
-#bin_hier <- hclust(peak_occurence_dist, method = "complete")
+bin_hier <- hclust(peak_occurence_dist, method = "complete")
 
 # we now can plot the information in bin_hier
-#plot(hist(bin_hier$height), main="Peak Occurence Distribution",
-     #xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
-#pdf("figures/dbp_hclust_dendro.pdf", height = 24, width = 50)
-#plot(hist(bin_hier$height), main="Peak Occurence Distribution",
-     #xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
-#dev.off()
-
+plot(hist(bin_hier$height), main="Peak Occurence Distribution",
+     xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
+pdf("figures/dbp_hclust_dendro.pdf", height = 24, width = 50)
+plot(hist(bin_hier$height), main="Peak Occurence Distribution",
+     xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
+dev.off()
+```
+<img src="figures/dbp_hclust_dendro.pdf" width="1888" />
+``` r
 #Now let's use GGDENDRO (dendrogram) package that will plot the branch lengths #that indicate how similar two samples are 
 #ggdendro::ggdendrogram(bin_hier, rotate = FALSE,  size = 3, 
                        #theme_dendro = TRUE) +
