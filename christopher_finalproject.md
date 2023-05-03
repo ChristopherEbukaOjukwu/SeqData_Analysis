@@ -453,22 +453,22 @@ rtracklayer::export(gencode_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christo
 
 # mRNA genes (called "protein_coding") in this version of gencode changes sometimes !
 mrna_genes <- gencode_genes[gencode_genes$gene_type %in% "protein_coding"] 
-#rtracklayer::export(mrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_genes.gtf")
-#table(gencode_genes$gene_type)
+rtracklayer::export(mrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_genes.gtf")
+table(gencode_genes$gene_type)
 
 # now doing a second index for lncRNA:
-#lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% "lncRNA"] 
-#rtracklayer::export(lncrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/lncrna_genes.gtf")
+lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% "lncRNA"] 
+rtracklayer::export(lncrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/lncrna_genes.gtf")
 
 # both mRNA and lncRNA annotations together.
-#mrna_lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% c("protein_coding","lncRNA")]
-#rtracklayer::export(mrna_lncrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_lncrna_genes.gtf")
+mrna_lncrna_genes <- gencode_genes[gencode_genes$gene_type %in% c("protein_coding","lncRNA")]
+rtracklayer::export(mrna_lncrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_lncrna_genes.gtf")
 
 # starting annotation file that we will use moving forward.
-#lncrna_mrna_genes <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_lncrna_genes.gtf")
+lncrna_mrna_genes <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_lncrna_genes.gtf")
 
 # converting to data frame
-#lncrna_mrna_genes_df <- lncrna_mrna_genes %>% as.data.frame()
+lncrna_mrna_genes_df <- lncrna_mrna_genes %>% as.data.frame()
 
 # creating and exporting promoter annotations
 lncrna_mrna_promoters <- promoters(lncrna_mrna_genes, upstream = 1000, downstream = 1000)
@@ -481,7 +481,7 @@ rtracklayer::export(lncrna_mrna_promoters, "/scratch/Shares/rinnclass/CLASS_2023
 #Now let's compare how lncRNAs and mRNAs cluster differnently?
 #Strategy: load annotations then index peak_occurrence for specific annotations
 # lncRNA promoters ggdendro
-#lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/gene_annotations/lncrna_mrna_promoters.gtf")
+lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/gene_annotations/lncrna_mrna_promoters.gtf")
 
 # now we can split into lncRNA and mRNA
 lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
@@ -631,7 +631,7 @@ ggplot(combined_metaplot_profile,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/combined_promoter_metaplot.jpg" width="1888" /> 
+<img src="figures/combined_promoter_metaplot.jpg" width="1000" height="500" /> 
 
 ## plotting the density of DBP localization events
 ``` r
@@ -705,7 +705,7 @@ pdf("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_p
 heatmap
 dev.off()
 ```
-<img src="figures/ tpm_heatmap.jpg" width="1888" />  
+<img src="SeqData_Analysis/tpm_heatmap.jpg" width="1888" />  
 
 ## Plotting binding vs expression
 ``` r
@@ -733,7 +733,7 @@ ggplot(promoter_features_df,
 save plot
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/binding_vs_expression.pdf")
 ```
-<img src="figures/binding_vs_expression.jpg" width="1888" />  
+<img src="SeqData_Analysis/binding_vs_expression.jpg" width="1888" />  
 
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
@@ -752,7 +752,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/nuclear_expression-vs-promoter_binding.pdf")
 ```
-<img src="figures/nuclear_expression-vs-promoter_binding.jpg" width="1888" />  
+<img src="SeqData_Analysis/nuclear_expression-vs-promoter_binding.jpg" width="1888" />  
 
 ## Is there a difference between cyto RNAs versus DBPs on promoter?
 ``` r
@@ -771,7 +771,7 @@ ggplot(promoter_features_df,
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/cytoplasmic_expression-vs-promoter_binding.pdf")
 ```
-<img src="figures/cytoplasmic_expression-vs-promoter_binding.pdf.jpg" width="1888" />  
+<img src="SeqData_Analysis/cytoplasmic_expression-vs-promoter_binding.pdf.jpg" width="1888" />  
 
 ## This is another way to look at it
 ``` r
@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="1888" /> 
+<img src="SeqData_Analysis/mrna_lncrna_tpm_nuclear.jpg" width="1888" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
@@ -849,4 +849,4 @@ combined_super_binder_metaplot_profile <- bind_rows(non_superbinder_metaplot_df,
   #scale_color_manual(values = c("#424242", "#a8404c"))
 #ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
-<img src="SeqData_Analsis/superbinder_metaplot.jpg" width="1888" /> 
+<img src="figures/superbinder_metaplot.jpg" width="1888" /> 
