@@ -381,9 +381,7 @@ pdf("figures/dbp_hclust_dendro.pdf", height = 24, width = 50)
 plot(hist(bin_hier$height), main="Peak Occurence Distribution",
      xlab="Peak Occurence", ylab="Frequency", pch=20,col="blue")
 dev.off()
-```
-<img src="figures/dbp_hclust_dendro.pdf" width="1888" />
-``` r
+
 #Now let's use GGDENDRO (dendrogram) package that will plot the branch lengths #that indicate how similar two samples are 
 #ggdendro::ggdendrogram(bin_hier, rotate = FALSE,  size = 3, 
                        #theme_dendro = TRUE) +
@@ -411,6 +409,8 @@ dev.off()
 # Nice let's save this using 'ggsave': since we used ggplot
 #ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/ggdendro_plot.pdf", height = 100, width = 22, limitsize = F)
 ```
+<img src="figures/dbp_hclust_dendro.pdf" width="1888" />
+<img src="figures/ggdendro_plot.pdf" width="1888" />
 
 ## clustering lncrna and mrna separatel
 ``` r
