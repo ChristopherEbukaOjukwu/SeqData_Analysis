@@ -413,7 +413,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 ```
 <img src="figures/ggdendro_plot.jpg" width="1888" />
 
-## clustering lncrna and mrna separatel
+## Clustering lncrna and mrna separately
 ``` r
 # loading lncRNA promoters
 lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/my_results/my_gene_annotation/lncrna_mrna_promoters.gtf")
@@ -437,7 +437,7 @@ ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
 # Now let's save this figure
 ggsave("figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
 ```
-<img src="figures/ lncrna_hclust_binary_dist.jpg" width="800" height="500" /> 
+<img src="figures/lncrna_hclust_binary_dist.jpg" width="800" height="500" /> 
 
 ```r
 
