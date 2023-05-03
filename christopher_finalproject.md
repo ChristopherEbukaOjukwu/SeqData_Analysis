@@ -1073,3 +1073,6 @@ res_status <- hepg2_k562_promoter_features_df %>%
 # saving for future
 write_csv2(res_status, "reservoir_overlap_stats.csv")
 ```
+Result: 
+1. There are 345 high-binding proteins that are not expressed in both K562 and HEPG2. 
+2. There are 80 Hepg2 reservoirs that overlap conservative k562 reservoirs.
