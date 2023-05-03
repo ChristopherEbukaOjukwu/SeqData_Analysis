@@ -293,6 +293,73 @@ Results:
 1. Firre and XIST promoters does not exist.
 2. GAPDH exists.
 
+<img src="figures/peaks_per_dbps.png" width="800" height="500" /> 
+
+## Finding out the ratio of num_peaks against genome_coverage
+```r
+ggplot(num_peaks_df, aes(x = num_peaks, y = total_peak_length)) +
+  geom_point() + 
+  geom_smooth(method = "gam", se = TRUE, color = "black", lty = 2)+
+  ylab("BP covered") +
+  xlab("Number of peaks") +
+  ggtitle("Peak count vs. total bases covered")
+
+```
+ <img src="figures/peaks_vs_coverage.png" width="800" height="500" />  
+ 
+ Result:
+Here we see a linear relationship between the number of peaks and total coverage suggests that as the number of peaks increases, 
+so does the total coverage.
+ 
+ ## The plot for the number of peaks on promoters
+ ```r
+ ggplot(num_peaks_df,
+       aes(x = num_peaks, y = peaks_overlapping_promoters)) +
+  geom_point() +
+  
+  geom_abline(slope = 1, linetype="dashed") +
+  geom_smooth(method = "lm", se=F, formula = 'y ~ x',
+              color = "#a8404c") +
+ # ggpubr prints equation
+  stat_regline_equation()+
+  # stat_regline_equation(label.x = 35000, label.y = 18000) +
+  ylim(0,60100) +
+  xlim(0,60100) +
+
+  # adding labels
+xlab("Peaks per DBP") +
+  ylab("Number of peaks overlapping promoters") +
+  ggtitle("Relationship Between Number of DBP Peaks and Promoter Overlaps")
+
+ggsave("figures/3_peak_num_vs_promoter_coverage.pdf")
+
+ ```
+<img src="figures/num_of_dbps.png" width="800" height="500" /> 
+
+
+## Plotting peak Coverage on gene bodies
+```r 
+ggplot(num_peaks_df,
+       aes(x = num_peaks, y = peaks_overlapping_genebody)) +
+ geom_point() +
+  
+  geom_abline(slope = 1, linetype="dashed") +
+  geom_smooth(method = "lm", se=F, formula = 'y ~ x',
+              color = "#a8404c") +
+  stat_regline_equation(label.x = 35000, label.y = 18000) +
+  
+  ylim(0,60100) +
+  xlim(0,60100) +
+
+  # adding labels
+xlab("Peaks per DBP") +
+  ylab("Number of peaks overlapping genes") +
+  ggtitle("Relationship Between Number of DBP Peaks and Gene Body Overlaps")
+
+ggsave("figures/4_peak_num_vs_gene_body_coverage.pdf")
+```
+<img src="figures/peak_on_genebodies.png" width="800" height="500" />  
+
 ## Gene similarities via clustering
 ``` r
 #let's look at the promoter peak occurence matrix (takes a min to load)
@@ -678,6 +745,52 @@ Results:
 1. The first thing noticed is that there are two regions where the binding is more concentrated compared to other regions, which could indicate two different populations or modes of binding.  
 2. Then we see inconsistency in the distribution: majority of the promoters lean towards 100 dbps, and a second minor peak beaks after 200 dbps and drops on 400 dbps. 
 3. From this distribution, we can then extract the superbinders.
+
+## Promoters without binding events
+```r
+# here is just a simple index and filter of the index to have at least 1 dbp bound.
+unbound_promoters <- peak_occurence_df %>% 
+  filter(peak_occurence_df$number_of_dbp < 1)
+
+# how many are there?
+nrow(unbound_promoters)
+
+#saving
+write_csv(unbound_promoters, "results/unbound_promoters.csv")
+```
+Result:
+The number of promoter without binding events is 9448
+
+## lncRNA versus mRNA promoter binding
+```r
+num_peaks_dfl <- num_peaks_df %>%
+  dplyr::select(-peaks_overlapping_promoters) %>%
+  
+  # We will discuss pivot longer in the next class (BUT IF YOUR INTERESTED ASK NOW IT'S WORTH IT!!)
+  pivot_longer(cols = peaks_overlapping_lncrna_promoters:peaks_overlapping_mrna_promoters,
+               names_to = "gene_type",
+               values_to = "peaks_overlapping_promoters") %>%
+  mutate(gene_type = gsub("peaks_overlapping_", "", gene_type))
+
+# plotting
+ggplot(num_peaks_dfl, aes(x = num_peaks, y = peaks_overlapping_promoters, 
+                         col = gene_type)) +
+  geom_point() +
+  
+         geom_abline(slope = 1, linetype="dashed") +
+  geom_smooth(method = "lm", se = FALSE, formula = "y ~ x") +
+  
+  stat_regline_equation() +
+  
+  scale_color_manual(values = c("#a8404c", "#424242"))+
+  
+  xlab("Peaks per DBP") +
+  ylab("Peaks Overlapping Promoters") +
+  ggtitle("Number of DBP Peaks and Promoter Overlaps")
+
+ggsave("figures/peaks_overlaps_relationship_by_gene_type.pdf", height = 5, width = 8)
+```
+<img src="figures/lncrna_vs_mrna_promoter_binding.png" width="800" height="500" /> 
 
 ## Beginning of RNASeq expression
 ``` r
