@@ -35,7 +35,7 @@ hist(num_peaks, breaks = 1000, xlim = c(0,3000))
 
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/figures/hist_num_peaks.pdf")
 ```
-<img src="figures/numpeaks_1.png" width="1888" />
+<img src="figures/numpeaks_1.png" width="1000" height="500" />
 
 ## Looking at just the first 3000
 <img src="figures/numpeaks_2.png" width="1888" />
