@@ -881,7 +881,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 
 Result: 
 1. We see a linear trend with the number of DBPs and expression levels. This could suggest a positive correlation between the two variables. In other words, as the number of DBPs increases, so does the expression level of the associated genes. This trend could indicate that DBPs play a role in regulating gene expression, potentially by binding to specific DNA sequences in gene promoters and modulating transcription. 
-
+  
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
 # Now let's make a similar plot for nuclear RNA abundance versus #DBPs bound to their promoter
@@ -997,3 +997,79 @@ ggplot(combined_super_binder_metaplot_profile, aes(x = x, y = dens, color = gene
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
 <img src="figures/superbinder_metaplot.jpg" width="800" height="500" /> 
+
+## Defining HEPG2 reservoirs
+```r
+promoter_features_df$hepg2_reservoir <- 
+  as.numeric(promoter_features_df$number_of_dbp > 5 & 
+               promoter_features_df$tpm_homo_sapiens_hepg2 < 0.001)
+
+# seeing what we got with table
+table(promoter_features_df$hepg2_reservoir)
+```
+Result:
+    0     1 
+  34352  2360
+  Shows 2360 in the larger dataset in HEPG2.
+
+## Determining how many that are similar genomic regions in k562 and hepG2.
+```{r reading in K562 reservoirs}
+
+k562_df <- read_csv("/scratch/Shares/rinnclass/CLASS_2023/data/data/2020_k562_promoter_peak_df.csv")
+
+# saving for future use this was hard to find :)
+write_csv(k562_df, "results/2020_k562_promoter_peak_df.csv")
+
+# next we want to merge the k562 adn Hepg2 DFs 
+# first we should label what is k562 and what is Hepg2
+
+
+# K562_df renaming :
+
+k562_df <- k562_df %>% 
+  dplyr::select(gene_id, reservoir, conservative_reservoir, tpm, expression, tf_binding, promoter_mean_tpm, promoter_median_tpm, promoter_max_tpm) %>%
+  dplyr::rename(k562_reservoir = reservoir, 
+                k562_conservative_reservoir = conservative_reservoir,
+                k562_expression = expression,
+                k562_tpm = tpm,
+                k562_tf_binding = tf_binding,
+                k562_promoter_mean_tpm =  promoter_mean_tpm,
+                k562_promoter_median_tpm = promoter_median_tpm,
+                k562_promoter_median_tpm = promoter_median_tpm,
+                k562_promoter_max_tpm = promoter_max_tpm)
+
+# save this file in new format
+write_csv(k562_df,"results/k562_df.csv")
+
+# testing read in for future use
+k562_df <- read_csv("k562_df.csv")
+
+# renaming promoter_features_df to hepg2_df
+
+hepg2_df <- promoter_features_df %>%
+  dplyr::select(gene_id, gene_name, tpm_homo_sapiens_hepg2, tpm_homo_sapiens_cytosolic_fraction, tpm_homo_sapiens_nuclear_fraction, tpm_homo_sapiens_insoluble_cytoplasmic_fraction, tpm_homo_sapiens_membrane_fraction, number_of_dbp, hepg2_reservoir) %>%
+  dplyr::rename( tpm_total = tpm_homo_sapiens_hepg2,
+                 tpm_cytosolic_fraction =  tpm_homo_sapiens_cytosolic_fraction,
+                 tpm_nuclear_fraction = tpm_homo_sapiens_nuclear_fraction ,
+                 tpm_insoluble_cytoplasmic_fraction = tpm_homo_sapiens_insoluble_cytoplasmic_fraction ,
+                 tpm_membrane_fraction = tpm_homo_sapiens_membrane_fraction)
+
+# let's save this handy file
+write_csv(hepg2_df,"hepg2_df.csv")
+
+# Let's merge the k562 reservoirs in with HEPG2_df
+# Merges on Gene_id
+hepg2_k562_promoter_features_df <- merge(hepg2_df, k562_df)
+
+# Now saving
+write_csv(hepg2_k562_promoter_features_df, "hepg2_k562_promoter_features_df.csv")
+
+# Make a table of reservoir status
+res_status <- hepg2_k562_promoter_features_df %>% 
+  #  !! another useful combination of group_by and summarize !!
+  group_by(hepg2_reservoir, k562_reservoir, k562_conservative_reservoir) %>%
+  summarize(count = n())
+
+# saving for future
+write_csv2(res_status, "reservoir_overlap_stats.csv")
+```
