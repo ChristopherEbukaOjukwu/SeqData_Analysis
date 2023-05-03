@@ -40,7 +40,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 ## Looking at just the first 3000
 <img src="figures/numpeaks_2.png" width="800" height="500" />
 
-##Filtering the consensus list 
+## Filtering the consensus list 
 ``` r
 # Filter out any chip data less 1,000 peaks == filtered consensus peaks
 filtered_consensus_list <- consensus_list[sapply(consensus_list, length) > 1000]
@@ -68,7 +68,7 @@ for(i in 1:length(consensus_list)) {
 rtracklayer::export(consensus_list[[i]], paste0("results/consensus_peaks/", names(consensus_list)[i],"_consensus_peaks.bed")) }
 ```
 
-##Exporting the consensus list and filtered consensus list
+## Exporting the consensus list and filtered consensus list
 ``` r
 consensus_file_list <- list.files("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/consensus_peaks", full.names = T, pattern = ".bed")
 
@@ -94,7 +94,7 @@ for(i in 1:length(peaks)) {
 }
 ```
 
-##Loading and exploring genome features
+## Loading and exploring genome features
 ``` r
 # What is the distribution of promoter overlaps versus gene-bodies (hint hist)
 gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/da#ta/genomes/gencode.v32.annotation.gtf")
@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="SeqData_Analysis/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
+<img src="mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
