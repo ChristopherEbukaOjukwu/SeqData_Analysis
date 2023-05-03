@@ -849,10 +849,4 @@ combined_super_binder_metaplot_profile <- bind_rows(non_superbinder_metaplot_df,
   #scale_color_manual(values = c("#424242", "#a8404c"))
 #ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
-<img src="figures/superbinder_metaplot.jpg" width="1888" /> 
-```r
-# We can now write these out for safekeeping / use in other analyses
-#write_csv(promoter_features_df, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/results/promoter_features_df.csv")
-#write_csv(tpm, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/results/mean_tpm_per_condition.csv")
-#write_csv(samplesheet, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/results/samplesheet.csv")
-```
+<img src="SeqData_Analsis/superbinder_metaplot.jpg" width="1888" /> 
