@@ -54,9 +54,10 @@ lost_dbps <- names(consensus_list[sapply(consensus_list, length) < 1000]) %>% as
 # saving 
 write.table(lost_dbps, "results/lost_dbps.csv")
 ```
+Result: There are 56 total dpbs that the metric has filtered out.
 
+## Exporting filtered consensus list and consenus list
 ``` r
-# How does peak number and genome coverage compare #what does this mean?
 for(i in 1:length(filtered_consensus_list)) {
   rtracklayer::export(filtered_consensus_list[[i]], 
                       paste0("results/filtered_consensus_peaks/", 
@@ -68,7 +69,7 @@ for(i in 1:length(consensus_list)) {
 rtracklayer::export(consensus_list[[i]], paste0("results/consensus_peaks/", names(consensus_list)[i],"_consensus_peaks.bed")) }
 ```
 
-## Exporting the consensus list and filtered consensus list
+## Making consensus file list
 ``` r
 consensus_file_list <- list.files("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/consensus_peaks", full.names = T, pattern = ".bed")
 
@@ -288,6 +289,9 @@ GAPDH_promoter <- promoter_dbps %>%
 ggplot(num_peaks_df, aes(x = num_peaks)) + 
  geom_histogram(bins = 70)
 ```
+Results:
+1. Firre and XIST promoters does not exist.
+2. GAPDH exists.
 
 ## Gene similarities via clustering
 ``` r
@@ -414,6 +418,10 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 ```
 <img src="figures/ggdendro_plot.jpg" width="1888" />
 
+We see here the clustering of genes based on similarities. SIN3B and HCFC1, for example, are quite different but quite similar in that they are
+involved in protein-protein interactions and chromatin modelling. On the other hand, TBP, a transcription factor, is dissimilar from H3K79me2 used 
+in histone modifications.
+
 ## Clustering lncrna and mrna separately
 ``` r
 # loading lncRNA promoters
@@ -521,6 +529,12 @@ save(bin_hier_mrna, mrna_peak_occurence, bin_hier_lncrna, lncrna_peak_occurence,
 ```
 <img src="figures/mrna_hclust_binary_dist.jpg" width="800" height="500" /> 
 
+Notes: lncRNA and mRNA cluster differently. mRNA is more likely to cluster based on functions and regulations, while lncRNA  is more likely
+to cluster based on their specific biological roles.
+The co-occurrence of H3K36me3 and H3K9me3 modifications in both areas of the mRNA and lncRNA clusters could suggest that there could be functional interaction between them in regulating transcription and RNA processing.
+This is also reflective in the co-occurrence of MLX and ZBTB21 and could suggest that they are involved in regulating transcription and chromatin organization
+of all types of genes, rather than being specific to a particular type of transcript. 
+
 ## Creating metaplots initial objects
 ``` r
 # loading in needed files from 01_peak_features
@@ -578,7 +592,11 @@ ggplot(lncrna_metaplot_df,
 
 dev.off()
 ```
-<img src="figures/lncrna_promoter_metaplot.jpg" width="800" height="500" /> 
+<img src="figures/lncrna_promoter_metaplot.jpg" width="800" height="1000" /> 
+
+Results:  There are some "rough plots". A "rough plot", for example EP300, could indicate that there is significant variability in the level of histone acetylation at lncRNA promoters across the different samples being analyzed. This could be due to differences in the levels of EP300 itself, or to differences in the activity 
+of other factors that regulate histone acetylation. It is also possible that some lncRNA promoters are more sensitive to changes in EP300 activity
+than others, leading to a more variable metaplot. In the case of KAT2B, the shape of the metaplot can be influenced by a variety of factors, such as the distribution of regulatory elements in the promoter region, the expression level and activity of transcription factors and chromatin modifiers, and the underlying epigenetic landscape. The HMGA1 has an empty plot, it could mean that this particular transcription factor is not strongly associated with the regulation of lncRNA expression in the system being studied. The H4K20me1 plots in the opposite direction; it could indicate a difference in the way this histone modification is associated with lncRNA expression compared to other histone modifications being analyzed. 
 
 ## Metaplot for mRNA
 ``` r
@@ -609,7 +627,12 @@ ggplot(mrna_metaplot_df,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/mrna_promoter_metaplot.jpg" width="800" height="500" /> 
+<img src="figures/mrna_promoter_metaplot.jpg" width="800" height="1000" /> 
+
+Results: H3K9me3 has a "rough plot"; it is generally associated with transcriptional repression, and so it could indicate that the 
+region being analyzed is a repressed region of the promoter. Also, the H4K20me1 modification is known to be associated with transcriptional 
+repression and heterochromatin formation, so an opposite direction plot could suggest the presence of heterochromatin-like regions upstream 
+of the TSS. 
 
 ##  Metaplot for both mRNA and lncRNA
 ``` r
@@ -632,7 +655,7 @@ ggplot(combined_metaplot_profile,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/combined_promoter_metaplot.jpg" width="800" height="500" /> 
+<img src="figures/combined_promoter_metaplot.jpg" width="800" height="1000" /> 
 
 ## plotting the density of DBP localization events
 ``` r
@@ -650,6 +673,11 @@ geom_density(alpha = 0.2, color = "#424242", fill = "#424242") +
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/num_binding_events_per_promoter.pdf")
 ```
 <img src="figures/num_binding_events_per_promoter.jpg" width="800" height="500" /> 
+
+Results: 
+1. The first thing noticed is that there are two regions where the binding is more concentrated compared to other regions, which could indicate two different populations or modes of binding.  
+2. Then we see inconsistency in the distribution: majority of the promoters lean towards 100 dbps, and a second minor peak beaks after 200 dbps and drops on 400 dbps. 
+3. From this distribution, we can then extract the superbinders.
 
 ## Beginning of RNASeq expression
 ``` r
@@ -708,6 +736,8 @@ dev.off()
 ```
 <img src="figures/tpm_heatmap.jpg" width="800" height="500" />  
 
+ Result: Some RNAs may function primarily within the nucleus, such as non-coding RNAs involved in transcriptional regulation, while others may function primarily in the cytoplasm, such as mRNAs that are translated into proteins.
+
 ## Plotting binding vs expression
 ``` r
 promoter_features_df <- read.csv("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/results/promoter_feature_df_tpm.csv")
@@ -735,6 +765,9 @@ save plot
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/binding_vs_expression.pdf")
 ```
 <img src="figures/binding_vs_expression.jpg" width="800" height="500" />  
+
+Result: 
+1. We see a linear trend with the number of DBPs and expression levels. This could suggest a positive correlation between the two variables. In other words, as the number of DBPs increases, so does the expression level of the associated genes. This trend could indicate that DBPs play a role in regulating gene expression, potentially by binding to specific DNA sequences in gene promoters and modulating transcription. 
 
 ## Heatmap of nuclear versus cytoplasmic expression
 ``` r
