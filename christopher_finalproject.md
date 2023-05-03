@@ -387,70 +387,72 @@ dev.off()
 ```r
 
 #Now let's use GGDENDRO (dendrogram) package that will plot the branch lengths #that indicate how similar two samples are 
-#ggdendro::ggdendrogram(bin_hier, rotate = FALSE,  size = 3, 
-                       #theme_dendro = TRUE) +
+ggdendro::ggdendrogram(bin_hier, rotate = FALSE,  size = 3, 
+                       theme_dendro = TRUE) +
    # 90 degree rotation to right
-   #coord_flip() +
-   #scale_y_continuous() +
+   coord_flip() +
+   scale_y_continuous() +
    # adds label
-   #scale_x_continuous(position = "top") +
+   scale_x_continuous(position = "top") +
    # subsection to labels in order of clustering
-   # ? seq_along
    #scale_x_continuous(breaks = seq_along(bin_hier$labels[bin_hier$order]),
-                      
                       # adding labels that are in the order 'column'
-             #labels = bin_hier$labels[bin_hier$order], position = "top",
-             #expand = c(0,0)) +
-   #theme(axis.text.x = element_text(angle = 90, hjust  = 1)) + 
-   #theme(axis.text.y = element_text(angle = 0,hjust = 1)) +
-   #scale_y_reverse(expand = c(0.01, 0)) +
-   #theme(
-     #plot.background = element_blank(),
-     #panel.grid.major = element_blank(),
-   #panel.grid.minor = element_blank(),
-     #panel.border = element_blank()
-   #)
-# Nice let's save this using 'ggsave': since we used ggplot
-#ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/ggdendro_plot.pdf", height = 100, width = 22, limitsize = F)
+             labels = bin_hier$labels[bin_hier$order], position = "top",
+             expand = c(0,0)) +
+   theme(axis.text.x = element_text(angle = 90, hjust  = 1)) + 
+   theme(axis.text.y = element_text(angle = 0,hjust = 1)) +
+   scale_y_reverse(expand = c(0.01, 0)) +
+   theme(
+     plot.background = element_blank(),
+     panel.grid.major = element_blank(),
+   panel.grid.minor = element_blank(),
+     panel.border = element_blank()
+   )
+#saving the image
+ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/ggdendro_plot.pdf", height = 100, width = 22, limitsize = F)
 ```
 <img src="figures/ggdendro_plot.jpg" width="1888" />
 
 ## clustering lncrna and mrna separatel
 ``` r
 # loading lncRNA promoters
-#lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/my_results/my_gene_annotation/lncrna_mrna_promoters.gtf")
+lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/my_results/my_gene_annotation/lncrna_mrna_promoters.gtf")
 
 # now we can split into lncRNA and mRNA
-#lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
+lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
 
 # mrna promoters
-#mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
+mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
 
 # Now we will use indexing to separate peak_occurrence_matrix in lncRNA and mRNA.
 # note we are indexing and using indexing in indexing to get what we want.
-#lncrna_peak_occurence <- promoter_peak_occurence_matrix[,lncrna_promoters$gene_id]
+lncrna_peak_occurence <- promoter_peak_occurence_matrix[,lncrna_promoters$gene_id]
 
 # we do the clutering the same as above or we can combine the dist and hclust:
-#bin_hier_lncrna <- hclust(dist(lncrna_peak_occurence, method = "binary"))
+bin_hier_lncrna <- hclust(dist(lncrna_peak_occurence, method = "binary"))
 
 # Now plot with ggdendro
-#ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
-# Now let's save this figure
+ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
 
-#ggsave("figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
+# Now let's save this figure
+ggsave("figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
+```
+<img src="figures/ lncrna_hclust_binary_dist.jpg" width="1888" /> 
+
+```r
 
 #getting the gencode_gr again
 gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/data/genomes/gencode.v32.annotation.gtf")
 
 # now just type == gene annotations
-#gencode_genes <- gencode_gr[gencode_gr$type == "gene"] 
-#table(gencode_gr$type)
+gencode_genes <- gencode_gr[gencode_gr$type == "gene"] 
+table(gencode_gr$type)
 
 # exporting all genes file (we will save all the .Rdata too at the end)
-#rtracklayer::export(gencode_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/gencode_genes.gtf")
+rtracklayer::export(gencode_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/gencode_genes.gtf")
 
 # mRNA genes (called "protein_coding") in this version of gencode changes sometimes !
-#mrna_genes <- gencode_genes[gencode_genes$gene_type %in% "protein_coding"] 
+mrna_genes <- gencode_genes[gencode_genes$gene_type %in% "protein_coding"] 
 #rtracklayer::export(mrna_genes, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_genes.gtf")
 #table(gencode_genes$gene_type)
 
@@ -465,15 +467,15 @@ gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/dat
 # starting annotation file that we will use moving forward.
 #lncrna_mrna_genes <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/mrna_lncrna_genes.gtf")
 
-# Nice that loaded so much faster -- lets see as DF
+# converting to data frame
 #lncrna_mrna_genes_df <- lncrna_mrna_genes %>% as.data.frame()
 
 # creating and exporting promoter annotations
-#lncrna_mrna_promoters <- promoters(lncrna_mrna_genes, upstream = 1000, downstream = 1000)
+lncrna_mrna_promoters <- promoters(lncrna_mrna_genes, upstream = 1000, downstream = 1000)
 
 # check right size
-#width(lncrna_mrna_promoters)
-#rtracklayer::export(lncrna_mrna_promoters, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/lncrna_mrna_promoters.gtf")
+width(lncrna_mrna_promoters)
+rtracklayer::export(lncrna_mrna_promoters, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/gene_annotation/lncrna_mrna_promoters.gtf")
 
 # Clustering of lncRNA and mRNA seperately
 #Now let's compare how lncRNAs and mRNAs cluster differnently?
@@ -482,47 +484,45 @@ gencode_gr <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/data/dat
 #lncrna_mrna_promoters <- rtracklayer::import("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/gene_annotations/lncrna_mrna_promoters.gtf")
 
 # now we can split into lncRNA and mRNA
-#lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
+lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
 
 # mrna promoters
-#mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
+mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
 
 # Now we will use indexing to separate peak_occurrence_matrix in lncRNA and mRNA.
 # note we are indexing and using indexing in indexing to get what we want.
-#lncrna_peak_occurence <- promoter_peak_occurence_matrix[,lncrna_promoters$gene_id]
+lncrna_peak_occurence <- promoter_peak_occurence_matrix[,lncrna_promoters$gene_id]
 
 # we do the clutering the same as above or we can combine the dist and hclust:
-#bin_hier_lncrna <- hclust(dist(lncrna_peak_occurence, method = "binary"))
-# Now plot with ggdendro
+bin_hier_lncrna <- hclust(dist(lncrna_peak_occurence, method = "binary"))
 
-#ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
+# Now plot with ggdendro
+ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
+
 # Now let's save this figure
-#ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
+ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
 
 # mRNA promter ggdendro
 #Now for mRNA
 # same strategy used very often:
 # indexing into larger file and filtering to a file of stuff you want.
-#mrna_peak_occurence <- promoter_peak_occurence_matrix[,mrna_promoters$gene_id]
+mrna_peak_occurence <- promoter_peak_occurence_matrix[,mrna_promoters$gene_id]
+
 # getting the distance matrix for only mRNA promoters  
-#bin_hier_mrna <- hclust(dist(mrna_peak_occurence, method = "binary"))
+bin_hier_mrna <- hclust(dist(mrna_peak_occurence, method = "binary"))
 # plotting with ggdendro
-#ggdendro::ggdendrogram(bin_hier, rotate = TRUE,  size = 3)
+ggdendro::ggdendrogram(bin_hier, rotate = TRUE,  size = 3)
 #they look alike because the combination of the overlaps are the same for mRNA and lncRNA i.e. similar binding profiles.
 # saving
-#ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/mrna_hclust_binary_dist.pdf", height = 44, width = 6)
+ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/figures/mrna_hclust_binary_dist.pdf", height = 44, width = 6)
 
-#save(bin_hier_mrna, mrna_peak_occurence, bin_hier_lncrna, lncrna_peak_occurence, lncrna_promoters, mrna_promoters, lncrna_mrna_promoters, lncrna_mrna_genes, lncrna_mrna_genes_df, mrna_lncrna_genes, lncrna_genes, mrna_genes, gencode_genes, file = "results/clustering_features.RData")
+save(bin_hier_mrna, mrna_peak_occurence, bin_hier_lncrna, lncrna_peak_occurence, lncrna_promoters, mrna_promoters, lncrna_mrna_promoters, lncrna_mrna_genes, lncrna_mrna_genes_df, mrna_lncrna_genes, lncrna_genes, mrna_genes, gencode_genes, file = "results/clustering_features.RData")
 ```
+<img src="figures/mrna_hclust_binary_dist.jpg" width="1888" /> 
 
 ## Creating metaplots initial objects
 ``` r
 # loading in needed files from 01_peak_features
-#load("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/peak_features.RData", verbose = T)
-
-#load("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/03_clustering/results/clustering_features.RData", verbose = T)
-
-
 consensusPeakPath <- "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/consensus"
 consensus_peaks_files <- list.files(consensusPeakPath, 
                                              pattern = "*.bed",
@@ -541,102 +541,97 @@ names(consensus_peaks) <- gsub("/scratch/Shares/rinnclass/CLASS_2023/Christopher
 ## Metaplot for all dps on lncRNA and mRNA promoters
 ``` r
 # making promoters (again, to be safe)
-#lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
-#mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
+lncrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "lncRNA"]
+mrna_promoters <- lncrna_mrna_promoters[lncrna_mrna_promoters$gene_type == "protein_coding"]
 ```
 
 ## Metaplot for lncRNA
 ``` r
 #setting up lncrna DF.
-#lncrna_metaplot_df <- data.frame(x = integer(), dens = numeric(), dbp = character())
+lncrna_metaplot_df <- data.frame(x = integer(), dens = numeric(), dbp = character())
 
 # for loop to populate DF with overlap density in lncrna promoters
-#for(i in 1:length(consensus_peaks)) {
-  #print(names(consensus_peaks)[[i]])
-  #tmp_df <- profile_tss(consensus_peaks[[i]], lncrna_mrna_promoters = lncrna_promoters)
-  #tmp_df$dbp <- names(consensus_peaks)[[i]]
-  #lncrna_metaplot_df <- bind_rows(lncrna_metaplot_df, tmp_df)
-#}
+for(i in 1:length(consensus_peaks)) {
+  print(names(consensus_peaks)[[i]])
+  tmp_df <- profile_tss(consensus_peaks[[i]], lncrna_mrna_promoters = lncrna_promoters)
+  tmp_df$dbp <- names(consensus_peaks)[[i]]
+  lncrna_metaplot_df <- bind_rows(lncrna_metaplot_df, tmp_df)
+}
 
-#lncrna_metaplot_df$gene_type <- "lncRNA"
+lncrna_metaplot_df$gene_type <- "lncRNA"
 
-#pdf("metaplots/lncrna_promoter_metaplot.pdf", height = 200, width = 32)
-#par(cex=2.5)
+pdf("metaplots/lncrna_promoter_metaplot.pdf", height = 200, width = 32)
+par(cex=2.5)
 
-#ggplot(lncrna_metaplot_df, 
-       #aes(x = x, y = dens, color = gene_type )) +
-  #geom_vline(xintercept = 0, lty = 2) + 
-  #geom_line(size = 2.5) + 
-  #facet_wrap(dbp ~ ., scales = "free_y") +
-  
-  
-  #ggtitle("lncrna metaplot promoter") + 
-  #scale_x_continuous(breaks = c(-1000, 0, 1000),
-                     #labels = c("-1kb", "TSS", "+1kb"),
-                     #name = "") + 
-  #ylab("Peak frequency") +
-  #scale_color_manual(values = c("#424242","#a8404c"))
+ggplot(lncrna_metaplot_df, 
+       aes(x = x, y = dens, color = gene_type )) +
+  geom_vline(xintercept = 0, lty = 2) + 
+  geom_line(size = 2.5) + 
+  facet_wrap(dbp ~ ., scales = "free_y") +
+  ggtitle("lncrna metaplot promoter") + 
+  scale_x_continuous(breaks = c(-1000, 0, 1000),
+                     labels = c("-1kb", "TSS", "+1kb"),
+                     name = "") + 
+  ylab("Peak frequency") +
+  scale_color_manual(values = c("#424242","#a8404c"))
 
-#dev.off()
+dev.off()
 ```
+<img src="figures/lncrna_promoter_metaplot.jpg" width="1888" /> 
 
 ## Metaplot for mRNA
 ``` r
-#mrna_metaplot_df <- data.frame(x = integer(), dens = numeric(), dbp = character())
+mrna_metaplot_df <- data.frame(x = integer(), dens = numeric(), dbp = character())
 
-#for(i in 1:length(consensus_peaks)) {
-  #print(names(consensus_peaks)[[i]])
-  #tmp_df <- profile_tss(consensus_peaks[[i]], lncrna_mrna_promoters = mrna_promoters)
-  #tmp_df$dbp <- names(consensus_peaks)[[i]]
-  #mrna_metaplot_df <- bind_rows(mrna_metaplot_df, tmp_df)
-#}
+for(i in 1:length(consensus_peaks)) {
+  print(names(consensus_peaks)[[i]])
+  tmp_df <- profile_tss(consensus_peaks[[i]], lncrna_mrna_promoters = mrna_promoters)
+  tmp_df$dbp <- names(consensus_peaks)[[i]]
+  mrna_metaplot_df <- bind_rows(mrna_metaplot_df, tmp_df)
+}
 
-#mrna_metaplot_df$gene_type <- "mRNA"
+mrna_metaplot_df$gene_type <- "mRNA"
 
-#pdf("metaplots/mrna_promoter_metaplot.pdf", height = 150, width = 32)
-#par(cex=2.3)
+pdf("metaplots/mrna_promoter_metaplot.pdf", height = 150, width = 32)
+par(cex=2.3)
 
-#ggplot(mrna_metaplot_df, 
-       #aes(x = x, y = dens, color = gene_type )) +
-  #geom_vline(xintercept = 0, lty = 2) + 
-  #geom_line(size = 1.5) + 
-  #facet_wrap(dbp ~ ., scales = "free_y") +
-  
-  
-  #ggtitle("mrna metaplot promoter") + 
-  #scale_x_continuous(breaks = c(-1000, 0, 1000),
-                     #labels = c("-1kb", "TSS", "+1kb"),
-                     #name = "") + 
-  #ylab("Peak frequency") +
-  #scale_color_manual(values = c("#424242","#a8404c"))
-
-#dev.off()
+ggplot(mrna_metaplot_df, 
+       aes(x = x, y = dens, color = gene_type )) +
+  geom_vline(xintercept = 0, lty = 2) + 
+  geom_line(size = 1.5) + 
+  facet_wrap(dbp ~ ., scales = "free_y") +
+  ggtitle("mrna metaplot promoter") + 
+  scale_x_continuous(breaks = c(-1000, 0, 1000),
+                     labels = c("-1kb", "TSS", "+1kb"),
+                     name = "") + 
+  ylab("Peak frequency") +
+  scale_color_manual(values = c("#424242","#a8404c"))
+dev.off()
 ```
+<img src="figures/mrna_promoter_metaplot.jpg" width="1888" /> 
 
 ##  Metaplot for both mRNA and lncRNA
 ``` r
-#combined_metaplot_profile <- bind_rows(mrna_metaplot_df, lncrna_metaplot_df)
+combined_metaplot_profile <- bind_rows(mrna_metaplot_df, lncrna_metaplot_df)
 
-#pdf("figures/combined_promoter_metaplot.pdf", height = 150, width = 32)
-#par(cex=2.3)
+pdf("figures/combined_promoter_metaplot.pdf", height = 150, width = 32)
+par(cex=2.3)
 
-# plotting - NOTE facet wrap by dbp !
-#ggplot(combined_metaplot_profile, 
-       #aes(x = x, y = dens, color = gene_type )) +
-  #geom_vline(xintercept = 0, lty = 2) + 
-  #geom_line(size = 1.5) + 
-  #facet_wrap(dbp ~ ., scales = "free_y") +
-  
-  
-  #ggtitle("Combined Promoter Metaplot") + 
-  #scale_x_continuous(breaks = c(-1000, 0, 1000),
-                     #labels = c("-1kb", "TSS", "+1kb"),
-                     #name = "") + 
-  #ylab("Peak frequency") +
-  #scale_color_manual(values = c("#424242","#a8404c"))
-
-#dev.off()
+# plotting
+ggplot(combined_metaplot_profile, 
+       aes(x = x, y = dens, color = gene_type )) +
+  geom_vline(xintercept = 0, lty = 2) + 
+  geom_line(size = 1.5) + 
+  facet_wrap(dbp ~ ., scales = "free_y") +
+  ggtitle("Combined Promoter Metaplot") + 
+  scale_x_continuous(breaks = c(-1000, 0, 1000),
+                     labels = c("-1kb", "TSS", "+1kb"),
+                     name = "") + 
+  ylab("Peak frequency") +
+  scale_color_manual(values = c("#424242","#a8404c"))
+dev.off()
 ```
+<img src="figures/combined_promoter_metaplot.jpg" width="1888" /> 
 
 ## plotting the density of DBP localization events
 ``` r
