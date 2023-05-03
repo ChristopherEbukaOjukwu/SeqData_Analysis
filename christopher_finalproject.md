@@ -786,7 +786,7 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 # saving figure
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
-<img src="mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
+<img src="SeqData_Analysis/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
