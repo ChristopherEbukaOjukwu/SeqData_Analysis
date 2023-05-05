@@ -166,15 +166,6 @@ num_peaks_df$peaks_overlapping_lncrna_genebody <- rowSums(genebody_peak_counts[,
 
 # mRNA gene bodies
 num_peaks_df$peaks_overlapping_mrna_genebody <- rowSums(genebody_peak_counts[,mrna_gene_ids])
-
-#plotting
-hist(promoter_peak_counts, genebody_peak_counts)
-plot(genebody_peak_counts, main="Promoter Peak Counts vs. Genebody Peak Counts",
-    xlab="Promoter Peak Counts", ylab="Genebody Peak Counts", pch=20, col="blue")
-# Add a grid
-grid()
-# Add a legend
-legend("topright", legend="Data", pch=20, col="blue")
 ```
 
 ## Finding out proteins that are TFs and most recurring dbd
@@ -209,7 +200,7 @@ names(human_tfs) <- c("ensembl_id",
 num_peaks_df <- merge(num_peaks_df, human_tfs, all.x = T)
 num_yes <- sum(num_peaks_df$tf == "Yes", na.rm = TRUE)
 # Print the result
-cat("Number of 'yes' occurrences:", num_yes) #344
+cat("Number of 'yes' occurrences:", num_yes) 
 
 # Extract the column as a character vector
 column <- as.character(num_peaks_df$dbd)
@@ -221,7 +212,7 @@ dbd_counts <- table(column)
 most_recurring_dbd <- names(dbd_counts [dbd_counts  == max(dbd_counts )])
 
 # Print the result
-cat("Most recurring dbd:", most_recurring_dbd) #C2H2 ZF
+cat("Most recurring dbd:", most_recurring_dbd) 
 ```
 Result: 
 1. There are 344 proteins that are TFs
@@ -268,9 +259,15 @@ pivot_longer(2:ncol(.), names_to = "gene_id", values_to = "occurrence") %>%
   dplyr::select(-occurrence) %>%
   left_join(DBPs_on_promoter)
   
-# checking Firre promoter
-firre_promoter <- promoter_dbps %>%
-  filter(gene_name == "FIRRE")
+# checking CENPS promoter
+CENPS_promoter <- promoter_dbps %>%
+  filter(gene_name == "CENPS") #343 DBPs bound.
+nrow(CENPS_promoter)
+
+# checking TOE1 promoter
+TOE1_promoter <- promoter_dbps %>%
+  filter(gene_name == "TOE1")
+nrow(TOE1_promoter)
 
 # XIST promoter (should be off since male cells)
 XIST_promoter <- promoter_dbps %>%
@@ -722,7 +719,7 @@ ggplot(combined_metaplot_profile,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/combined_promoter_metaplot.jpg" width="800" height="1000" /> 
+<img src="figures/combined_promoter_metaplot.jpg" width="1500" height="1500" /> 
 
 ## plotting the density of DBP localization events
 ``` r
@@ -791,6 +788,11 @@ ggplot(num_peaks_dfl, aes(x = num_peaks, y = peaks_overlapping_promoters,
 ggsave("figures/peaks_overlaps_relationship_by_gene_type.pdf", height = 5, width = 8)
 ```
 <img src="figures/lncrna_vs_mrna_promoter_binding.png" width="800" height="500" /> 
+
+Result:
+1. Here we see that the mRNA promoters have a higher number of peaks that overlap with promoter regions than lncRNA promoters.
+2. mRNA promoters could likely have more regulatory regions than lncRNA promoters.
+3. Also, there could be more transcription factors and other proteins binding to mRNA promoters than lncRNA promoters.
 
 ## Beginning of RNASeq expression
 ``` r
