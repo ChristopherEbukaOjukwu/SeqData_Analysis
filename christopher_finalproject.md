@@ -279,7 +279,7 @@ GAPDH_promoter <- promoter_dbps %>%
   filter(gene_name == "GAPDH") 
 
 # saving
-#promoter_dbps_df <- promoter_dbps %>% as.data.frame()
+promoter_dbps_df <- promoter_dbps %>% as.data.frame()
 
 #write.csv(promoter_dbps, "/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/01_create_consensus_peaks/results/promoter_dbps.csv")
 
@@ -513,7 +513,7 @@ ggdendro::ggdendrogram(bin_hier_lncrna, rotate = T,  size = 3)
 # Now let's save this figure
 ggsave("figures/lncrna_hclust_binary_dist.pdf", height = 49, width = 6)
 ```
-<img src="figures/lncrna_hclust_binary_dist.jpg" width="800" height="500" /> 
+<img src="figures/lncrna_hclust_binary_dist.jpg" width="1500" height="1500" /> 
 
 ```r
 
@@ -594,7 +594,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 
 save(bin_hier_mrna, mrna_peak_occurence, bin_hier_lncrna, lncrna_peak_occurence, lncrna_promoters, mrna_promoters, lncrna_mrna_promoters, lncrna_mrna_genes, lncrna_mrna_genes_df, mrna_lncrna_genes, lncrna_genes, mrna_genes, gencode_genes, file = "results/clustering_features.RData")
 ```
-<img src="figures/mrna_hclust_binary_dist.jpg" width="800" height="500" /> 
+<img src="figures/mrna_hclust_binary_dist.jpg" width="1500" height="1500" /> 
 
 Notes: lncRNA and mRNA cluster differently. mRNA is more likely to cluster based on functions and regulations, while lncRNA  is more likely
 to cluster based on their specific biological roles.
@@ -659,7 +659,7 @@ ggplot(lncrna_metaplot_df,
 
 dev.off()
 ```
-<img src="figures/lncrna_promoter_metaplot.jpg" width="800" height="1000" /> 
+<img src="figures/lncrna_promoter_metaplot.jpg" width="1500" height="1500" /> 
 
 Results:  There are some "rough plots". A "rough plot", for example EP300, could indicate that there is significant variability in the level of histone acetylation at lncRNA promoters across the different samples being analyzed. This could be due to differences in the levels of EP300 itself, or to differences in the activity 
 of other factors that regulate histone acetylation. It is also possible that some lncRNA promoters are more sensitive to changes in EP300 activity
@@ -694,7 +694,7 @@ ggplot(mrna_metaplot_df,
   scale_color_manual(values = c("#424242","#a8404c"))
 dev.off()
 ```
-<img src="figures/mrna_promoter_metaplot.jpg" width="800" height="1000" /> 
+<img src="figures/mrna_promoter_metaplot.jpg" width="1500" height="1500" /> 
 
 Results: H3K9me3 has a "rough plot"; it is generally associated with transcriptional repression, and so it could indicate that the 
 region being analyzed is a repressed region of the promoter. Also, the H4K20me1 modification is known to be associated with transcriptional 
@@ -939,6 +939,9 @@ ggplot(promoter_features_df, aes(x = log2(tpm_homo_sapiens_nuclear_fraction + 0.
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/04_binding_vs_expression/figures/mrna_lncrna_tpm_nuclear.pdf")
 ```
 <img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
+
+Result:
+This shows clearly that protein coding has a higher expression than lncRNA.
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
