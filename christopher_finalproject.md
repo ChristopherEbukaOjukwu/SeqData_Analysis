@@ -261,7 +261,7 @@ pivot_longer(2:ncol(.), names_to = "gene_id", values_to = "occurrence") %>%
   
 # checking CENPS promoter
 CENPS_promoter <- promoter_dbps %>%
-  filter(gene_name == "CENPS") #343 DBPs bound.
+  filter(gene_name == "CENPS") 
 nrow(CENPS_promoter)
 
 # checking TOE1 promoter
@@ -269,13 +269,14 @@ TOE1_promoter <- promoter_dbps %>%
   filter(gene_name == "TOE1")
 nrow(TOE1_promoter)
 
-# XIST promoter (should be off since male cells)
-XIST_promoter <- promoter_dbps %>%
-  filter(gene_name == "XIST")
+# checking POLR3G promoter
+POLR3G_promoter <- promoter_dbps %>%
+  filter(gene_name == "POLR3G") 
+nrow(POLR3G_promoter)
 
 # GAPDH
 GAPDH_promoter <- promoter_dbps %>%
-  filter(gene_name == "GAPDH")
+  filter(gene_name == "GAPDH") 
 
 # saving
 #promoter_dbps_df <- promoter_dbps %>% as.data.frame()
@@ -287,8 +288,10 @@ ggplot(num_peaks_df, aes(x = num_peaks)) +
  geom_histogram(bins = 70)
 ```
 Results:
-1. Firre and XIST promoters does not exist.
-2. GAPDH exists.
+1. CENPS #343 DBPs bound.
+2. TOE1 #346 DBPs bound.
+3. POLR3G #4 DBPs bound.
+4. GAPDH #360 DBPs bound.
 
 <img src="figures/peaks_per_dbps.png" width="800" height="500" /> 
 
