@@ -1005,6 +1005,7 @@ ggplot(combined_super_binder_metaplot_profile, aes(x = x, y = dens, color = gene
 ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/final_project/analysis/metaplots/superbinder_metaplot.pdf")
 ```
 <img src="figures/superbinder_metaplot.jpg" width="800" height="500" /> 
+Result: There are 11, 689 genes that are superbinders. Out of this number, there appears to be more mRNA superbinders than lncRNA superbinders.
 
 ## Defining HEPG2 reservoirs
 ```r
@@ -1016,8 +1017,6 @@ promoter_features_df$hepg2_reservoir <-
 table(promoter_features_df$hepg2_reservoir)
 ```
 Result:
-    0     1 
-  34352  2360
   Shows 2360 in the larger dataset in HEPG2.
 
 ## Determining how many that are similar genomic regions in k562 and hepG2.
