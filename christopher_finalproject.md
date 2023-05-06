@@ -949,7 +949,7 @@ ggsave("/scratch/Shares/rinnclass/CLASS_2023/Christopher/CLASS_2023/CLASSES/fina
 <img src="figures/mrna_lncrna_tpm_nuclear.jpg" width="800" height="500" /> 
 
 Result:
-This shows clearly that protein coding has a higher expression than lncRNA.
+This shows clearly that mRNA has a higher expression than lncRNA.
 
 ## Extracting proteins without expressions from high-binding proteins
 ``` r
@@ -1069,8 +1069,6 @@ hepg2_df <- promoter_features_df %>%
                  tpm_insoluble_cytoplasmic_fraction = tpm_homo_sapiens_insoluble_cytoplasmic_fraction ,
                  tpm_membrane_fraction = tpm_homo_sapiens_membrane_fraction)
 
-# let's save this handy file
-write_csv(hepg2_df,"hepg2_df.csv")
 
 # Let's merge the k562 reservoirs in with HEPG2_df
 # Merges on Gene_id
@@ -1084,9 +1082,6 @@ res_status <- hepg2_k562_promoter_features_df %>%
   #  !! another useful combination of group_by and summarize !!
   group_by(hepg2_reservoir, k562_reservoir, k562_conservative_reservoir) %>%
   summarize(count = n())
-
-# saving for future
-write_csv2(res_status, "reservoir_overlap_stats.csv")
 ```
 Result: 
 1. There are 345 high-binding proteins that are not expressed in both K562 and HEPG2. 
