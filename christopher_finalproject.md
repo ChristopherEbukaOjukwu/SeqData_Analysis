@@ -336,6 +336,8 @@ ggsave("figures/3_peak_num_vs_promoter_coverage.pdf")
  ```
 <img src="figures/num_of_dbps.png" width="800" height="500" /> 
 
+Result: Here we see the number of peaks overlapping promoters and peaks per DBP. As the peaks per DBP increases, the number of peaks overlapping promoters
+remains the same.
 
 ## Plotting peak Coverage on gene bodies
 ```r 
@@ -359,6 +361,12 @@ xlab("Peaks per DBP") +
 ggsave("figures/4_peak_num_vs_gene_body_coverage.pdf")
 ```
 <img src="figures/peak_on_genebodies.png" width="800" height="500" />  
+
+Result: Here we see the number of peaks overlapping genes and peaks per DBP. As the peaks per DBP increases, the number of peaks overlapping promoters
+increases, as well.
+
+The difference between this plot and the previous one might be due to the fact that as the number of dbps increases, more potential binding sites for transcription factors and other regulatory proteins are available. This may lead to an increase in the number of peaks overlapping genes, as these factors bind to specific sequences in the DNA to regulate gene expression. On the other hand, the number of peaks overlapping promoters may not increase as much because promoter regions typically have specific sequences that are recognized by a limited set of regulatory factors. Once these binding sites are occupied by the appropriate factors, additional binding events may not occur as frequently as in the gene regions. Additionally, some promoters may be silenced or have low activity in certain conditions, leading to fewer peaks overall.
+
 
 ## Gene similarities via clustering
 ``` r
@@ -759,7 +767,7 @@ nrow(unbound_promoters)
 write_csv(unbound_promoters, "results/unbound_promoters.csv")
 ```
 Result:
-The number of promoter without binding events is 9448
+The number of promoter without binding events is 9448.
 
 ## lncRNA versus mRNA promoter binding
 ```r
